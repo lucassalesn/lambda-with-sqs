@@ -58,11 +58,12 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
-
+          
       - run: npm install
 
       - name: Synth stack
         run: npm run cdk synth
 
+
       - name: Deploy stack
-        run: npm run cdk deploy --require-approval never
+        run: npm run deploy:cd
