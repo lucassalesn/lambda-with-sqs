@@ -15,6 +15,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./bootstrap
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v1
@@ -33,7 +36,7 @@ jobs:
       - run: npm install
 
       - name: Synth stack
-        run: npm run --cwd bootstrap/ cdk synth
+        run: npm run cdk synth
 
       - name: Deploy stack
-        run: npm run --cwd bootstrap/ cdk deploy --require-approval never
+        run: npm run cdk deploy --require-approval never

@@ -27,6 +27,8 @@ jobs:
 
       - name: Deploy stack
         run: npm run cdk deploy --require-approval never
+
+        
   deploy-main:
     environment: main
     runs-on: ubuntu-latest
