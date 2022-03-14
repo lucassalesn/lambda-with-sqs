@@ -39,4 +39,4 @@ jobs:
         run: npm run cdk synth
 
       - name: Deploy stack
-        run: npm run cdk deploy --require-approval never
+        run: npm run deploy:cd
