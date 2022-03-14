@@ -5,6 +5,7 @@ on:
 jobs:
   deploy-develop:
     environment: develop
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
       - name: Git clone the repository
@@ -29,6 +30,7 @@ jobs:
   deploy-main:
     environment: main
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
