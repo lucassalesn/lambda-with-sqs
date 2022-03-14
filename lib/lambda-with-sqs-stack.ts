@@ -22,7 +22,7 @@ export class LambdaWithSqsStack extends Stack {
       memorySize: 512,
       handler: 'handler',
       environment:{
-        AWS_REGION: process.env.AWS_REGION || 'example-region',
+        AWS_SQS_REGION: process.env.AWS_REGION || 'example-region',
         SQS_QUEUE_URL: queue.queueUrl
 
       }

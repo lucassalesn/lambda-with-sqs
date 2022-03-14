@@ -2,7 +2,7 @@ import { config, SQS } from 'aws-sdk'
 
 export const sqsSendMessage = async (message: string) => {
   try {
-    config.update({ region: process.env.AWS_REGION })
+    config.update({ region: process.env.AWS_SQS_REGION })
 
     const sqs = new SQS({ apiVersion: '2012-11-05' })
 
