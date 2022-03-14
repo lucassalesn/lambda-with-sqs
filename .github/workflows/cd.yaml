@@ -1,0 +1,30 @@
+name: cd
+on:
+  push:
+    branches: [main, develop]
+env:
+  AWS_REGION : ${{ secrets.AWS_REGION }}   
+jobs:
+  deploy:
+    environment: ${GITHUB_REF##*/}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ARN_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - run: npm install
+
+      - name: Synth stack
+        run: npm run cdk synth
+
+      - name: Deploy stack
+        run: npm run cdk deploy --require-approval never
