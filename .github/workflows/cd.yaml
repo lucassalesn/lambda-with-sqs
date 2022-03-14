@@ -7,6 +7,9 @@ jobs:
     environment: develop
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ENVIRONMENT: develop
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
@@ -25,6 +28,7 @@ jobs:
       - name: Synth stack
         run: npm run cdk synth
 
+
       - name: Deploy stack
         run: npm run deploy:cd
 
@@ -32,6 +36,9 @@ jobs:
   deploy-main:
     environment: main
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ENVIRONMENT: prod
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Git clone the repository
