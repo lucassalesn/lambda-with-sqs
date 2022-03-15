@@ -7,6 +7,11 @@ import { Construct } from 'constructs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 
+const getSSMUrl = (queueArn: string) => {
+  const indexOf = queueArn.lastIndexOf(":")
+  return queueArn.slice(0, indexOf)
+}
+
 export class LambdaWithSqsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -60,7 +65,7 @@ export class LambdaWithSqsStack extends Stack {
     }))
 
     handler.addToRolePolicy(new iam.PolicyStatement({
-      resources: [SSMQueueUrl.parameterArn],
+      resources: [getSSMUrl(SSMQueueUrl.parameterArn)],
       actions: ['ssm:*']
     }))
 
