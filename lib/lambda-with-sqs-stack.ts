@@ -32,8 +32,8 @@ export class LambdaWithSqsStack extends Stack {
 
     const SSMJsonTest = new ssm.StringParameter(this, `SSM-JSON-TEST-${process.env.ENVIRONMENT}`, {
       allowedPattern: '.*',
-      description: 'Queue url',
-      parameterName: 'queue-url',
+      description: 'JSON test',
+      parameterName: 'json-test',
       stringValue: process.env.JSON_FROM_GH || "default",
       tier: ssm.ParameterTier.STANDARD,
     });
