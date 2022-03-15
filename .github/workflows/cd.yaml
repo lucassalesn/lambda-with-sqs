@@ -2,17 +2,19 @@ name: cd
 on:
   push:
     branches: [main, develop]
+
 jobs:
-  deploy-develop:
-    environment: develop
-    permissions:
-      id-token: write
-      contents: read
-    if: github.ref == 'refs/heads/develop'
+  deploy:
+    strategy:
+      matrix:
+        env: [ develop, main]
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.env }}
+    if: github.ref == 'refs/heads/${{ matrix.env}}'
     runs-on: ubuntu-latest
     env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      ENVIRONMENT: develop
+      ENVIRONMENT: ${{ matrix.env }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
@@ -26,39 +28,6 @@ jobs:
         with:
           node-version: "14"
 
-      - run: npm install
-
-      - name: Synth stack
-        run: npm run cdk synth
-
-
-      - name: Deploy stack
-        run: npm run deploy:cd
-
-
-  deploy-main:
-    environment: main
-    permissions:
-      id-token: write
-      contents: read
-    runs-on: ubuntu-latest
-    env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      ENVIRONMENT: prod
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v3
-      - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ secrets.AWS_ARN_ROLE }}
-          aws-region: ${{ secrets.AWS_REGION }} 
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-          
       - run: npm install
 
       - name: Synth stack
