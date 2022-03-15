@@ -30,6 +30,8 @@ jobs:
 
       - name: Synth stack
         run: npm run cdk synth
+        env:
+          JSON_FROM_GH: ${{ secrets.JSON_TEST }}
 
 
       - name: Deploy stack
@@ -63,6 +65,9 @@ jobs:
 
       - name: Synth stack
         run: npm run cdk synth
+        env:
+          JSON_FROM_GH: ${{ secrets.JSON_TEST }}
+
 
 
       - name: Deploy stack

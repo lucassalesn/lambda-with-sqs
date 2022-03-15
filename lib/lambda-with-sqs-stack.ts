@@ -30,6 +30,14 @@ export class LambdaWithSqsStack extends Stack {
       tier: ssm.ParameterTier.STANDARD,
     });
 
+    const SSMJsonTest = new ssm.StringParameter(this, `SSM-SQS-queue-url-${process.env.ENVIRONMENT}`, {
+      allowedPattern: '.*',
+      description: 'Queue url',
+      parameterName: 'queue-url',
+      stringValue: process.env.JSON_FROM_GH || "default",
+      tier: ssm.ParameterTier.STANDARD,
+    });
+
     const handler = new lambda.NodejsFunction(this, `lambda-emitter-${process.env.ENVIRONMENT}`, {
       entry: './src/handlers/sqs-emitter.ts',
       runtime: Runtime.NODEJS_14_X,
@@ -38,6 +46,7 @@ export class LambdaWithSqsStack extends Stack {
       environment:{
         AWS_SQS_REGION: process.env.AWS_REGION || 'example-region',
         SSM_SQS_QUEUE: SSMQueueUrl.parameterName,
+        SSM_JSON_TEST: SSMJsonTest.parameterName
       }
     })
 
