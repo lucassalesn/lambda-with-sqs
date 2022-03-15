@@ -1,4 +1,4 @@
-import { config, SQS } from 'aws-sdk'
+import { config, SQS, SSM } from 'aws-sdk'
 
 export const sqsSendMessage = async (message: string) => {
   try {
@@ -6,10 +6,16 @@ export const sqsSendMessage = async (message: string) => {
 
     const sqs = new SQS({ apiVersion: '2012-11-05' })
 
+    const ssm = new SSM({ apiVersion: '2012-11-05'})
+
+    const parameterValue = await ssm.getParameter({ Name: process.env.SSM_QUEUE_URL || '' , WithDecryption: true }).promise();
+
+    console.log(parameterValue)
+
     const params = {
       DelaySeconds: 30,
       MessageBody: message,
-      QueueUrl: process.env.SQS_QUEUE_URL || 'example-queue-url'
+      QueueUrl: parameterValue.Parameter?.Value || ""
     }
 
     await sqs.sendMessage(params).promise()

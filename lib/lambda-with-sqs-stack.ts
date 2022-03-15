@@ -2,6 +2,7 @@ import { Duration, Stack, StackProps } from 'aws-cdk-lib';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as lambda from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
@@ -16,6 +17,30 @@ export class LambdaWithSqsStack extends Stack {
 
     const eventSource = new SqsEventSource(queue)
 
+    const SSMGoogleCredential = new ssm.StringParameter(this, `Google-Credential-${process.env.ENVIRONMENT}`, {
+      allowedPattern: '.*',
+      description: 'Google credentials json',
+      parameterName: 'gcp-credentials',
+      stringValue: process.env.GOOGLE_CREDENTIALS || '' ,
+      tier: ssm.ParameterTier.STANDARD,
+    });
+
+    const SSMGithubCredential = new ssm.StringParameter(this, `Github-Credential-${process.env.ENVIRONMENT}`, {
+      allowedPattern: '.*',
+      description: 'Github credentials json',
+      parameterName: 'github-credentials',
+      stringValue: process.env.GITHUB_CREDENTIALS || '' ,
+      tier: ssm.ParameterTier.STANDARD,
+    });
+
+    const SSMQueueUrl = new ssm.StringParameter(this, `SQS-queue-${process.env.ENVIRONMENT}`, {
+      allowedPattern: '.*',
+      description: 'Queue url',
+      parameterName: 'queue-url',
+      stringValue: queue.queueUrl ,
+      tier: ssm.ParameterTier.STANDARD,
+    });
+
     const handler = new lambda.NodejsFunction(this, `lambda-emitter-${process.env.ENVIRONMENT}`, {
       entry: './src/handlers/sqs-emitter.ts',
       runtime: Runtime.NODEJS_14_X,
@@ -23,8 +48,9 @@ export class LambdaWithSqsStack extends Stack {
       handler: 'handler',
       environment:{
         AWS_SQS_REGION: process.env.AWS_REGION || 'example-region',
-        SQS_QUEUE_URL: queue.queueUrl
-
+        SSM_SQS_QUEUE: SSMQueueUrl.parameterName,
+        SSM_GOOGLE_CREDENTIALS: SSMGoogleCredential.parameterName,
+        SSM_GITHUB_CREDENTIALS: SSMGithubCredential.parameterName
       }
     })
 
