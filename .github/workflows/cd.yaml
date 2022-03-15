@@ -10,7 +10,7 @@ jobs:
         env: [ develop, main]
     runs-on: ubuntu-latest
     environment: ${{ matrix.env }}
-    if: github.ref == 'refs/heads/${{ matrix.env}}'
+    if: github.ref == matrix.env
     env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ENVIRONMENT: ${{ matrix.env }}
