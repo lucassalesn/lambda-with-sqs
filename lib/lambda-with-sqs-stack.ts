@@ -21,7 +21,7 @@ export class LambdaWithSqsStack extends Stack {
       allowedPattern: '.*',
       description: 'Google credentials json',
       parameterName: 'gcp-credentials',
-      stringValue: process.env.GOOGLE_CREDENTIALS || '' ,
+      stringValue: process.env.GOOGLE_CREDENTIALS || 'default' ,
       tier: ssm.ParameterTier.STANDARD,
     });
 
@@ -29,7 +29,7 @@ export class LambdaWithSqsStack extends Stack {
       allowedPattern: '.*',
       description: 'Github credentials json',
       parameterName: 'github-credentials',
-      stringValue: process.env.GITHUB_CREDENTIALS || '' ,
+      stringValue: process.env.GITHUB_CREDENTIALS || 'default' ,
       tier: ssm.ParameterTier.STANDARD,
     });
 
