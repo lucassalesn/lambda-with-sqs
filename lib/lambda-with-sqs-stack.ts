@@ -38,8 +38,6 @@ export class LambdaWithSqsStack extends Stack {
       environment:{
         AWS_SQS_REGION: process.env.AWS_REGION || 'example-region',
         SSM_SQS_QUEUE: SSMQueueUrl.parameterName,
-        SSM_GOOGLE_CREDENTIALS: SSMGoogleCredential.parameterName,
-        SSM_GITHUB_CREDENTIALS: SSMGithubCredential.parameterName
       }
     })
 
