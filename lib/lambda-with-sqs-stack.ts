@@ -59,6 +59,11 @@ export class LambdaWithSqsStack extends Stack {
       actions: ['sqs:*']
     }))
 
+    handler.addToRolePolicy(new iam.PolicyStatement({
+      resources: [SSMQueueUrl.parameterArn],
+      actions: ['ssm:*']
+    }))
+
     new lambda.NodejsFunction(this, `lambda-receiver-${process.env.ENVIRONMENT}`, {
       entry: './src/handlers/sqs-receiver.ts',
       runtime: Runtime.NODEJS_14_X,
