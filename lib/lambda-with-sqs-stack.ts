@@ -22,22 +22,6 @@ export class LambdaWithSqsStack extends Stack {
 
     const eventSource = new SqsEventSource(queue)
 
-    const SSMGoogleCredential = new ssm.StringParameter(this, `SSM-Google-Credential-${process.env.ENVIRONMENT}`, {
-      allowedPattern: '.*',
-      description: 'Google credentials json',
-      parameterName: 'gcp-credentials',
-      stringValue: process.env.GOOGLE_CREDENTIALS || 'default' ,
-      tier: ssm.ParameterTier.STANDARD,
-    });
-
-    const SSMGithubCredential = new ssm.StringParameter(this, `SSM-Github-Credential-${process.env.ENVIRONMENT}`, {
-      allowedPattern: '.*',
-      description: 'Github credentials json',
-      parameterName: 'github-credentials',
-      stringValue: process.env.GITHUB_CREDENTIALS || 'default' ,
-      tier: ssm.ParameterTier.STANDARD,
-    });
-
     const SSMQueueUrl = new ssm.StringParameter(this, `SSM-SQS-queue-url-${process.env.ENVIRONMENT}`, {
       allowedPattern: '.*',
       description: 'Queue url',
