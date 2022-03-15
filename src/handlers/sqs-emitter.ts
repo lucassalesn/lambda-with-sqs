@@ -8,7 +8,7 @@ export const sqsSendMessage = async (message: string) => {
 
     const ssm = new SSM({apiVersion: '2014-11-06'})
 
-    const parameterValue = await ssm.getParameter({ Name: process.env.SSM_QUEUE_URL || '' , WithDecryption: true }).promise();
+    const parameterValue = await ssm.getParameter({ Name: process.env.SSM_SQS_QUEUE || '' , WithDecryption: true }).promise();
 
     console.log(parameterValue)
 
