@@ -65,7 +65,7 @@ export class LambdaWithSqsStack extends Stack {
     }))
 
     handler.addToRolePolicy(new iam.PolicyStatement({
-      resources: [`${getSSMUrl(SSMQueueUrl.parameterArn)}/*`],
+      resources: [getSSMUrl(SSMQueueUrl.parameterArn)],
       actions: ['ssm:*']
     }))
 
